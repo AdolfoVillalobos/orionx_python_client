@@ -11,7 +11,7 @@ from dataclasses import dataclass, Field
 
 
 @dataclass
-class AbstractClient(ABC):
+class AbstractAPI(ABC):
 
     api_url: str
     api_key: str
@@ -76,7 +76,7 @@ class AbstractClient(ABC):
 
 
 @dataclass
-class OrionXClient(AbstractClient):
+class OrionXAPI(AbstractAPI):
     exchange: str = "orionX"
 
     def get_headers(self, signature, timestamp):
