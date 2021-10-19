@@ -90,7 +90,6 @@ class OrionXAPI(AbstractAPI):
 
     def get_signature(self, payload, timestamp):
         body = json.dumps(payload)
-        print(self.secret_key)
         key = bytearray(self.secret_key, "utf-8")
         msg = str(int(timestamp)) + str(body)
         msg = msg.encode("utf-8")
