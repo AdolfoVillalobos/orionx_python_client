@@ -2,7 +2,9 @@ import aiohttp
 import asyncio
 import json
 import logging
+
 from typing import List
+from .currency import CEROS
 from .queries import get_cancel_order_query, get_open_orders_query, get_new_position_query, get_cancel_multiple_orders_query
 
 
@@ -76,7 +78,7 @@ async def get_order_status(self, order_id: str, session: aiohttp.ClientSession):
     try:
         query_str = get_order_status(order_id=order_id)
         payload = {"query": query_str, "variables": {}}
-        response = await self.client.request("POST", "graphql", session, payload)
+        response = await self.request("POST", "graphql", session, payload)
         logging.debug(response)
 
         if "data" in response:
@@ -94,7 +96,7 @@ async def close_orders(self, order_ids: List[str], session: aiohttp.ClientSessio
         str_ids = json.dumps(order_ids)
         query_str = get_cancel_multiple_orders_query(str_ids=str_ids)
         payload = {"query": query_str, "variables": {}}
-        response = await self.client.request("POST", "graphql", session, payload)
+        response = await self.request("POST", "graphql", session, payload)
 
         for order in order_ids:
             status = await self.get_order_status(order_id=order, session=session)
@@ -134,7 +136,7 @@ async def new_position(
         )
 
         payload = {"query": query_place_order, "variables": {}}
-        response = await self.client.request("POST", "graphql", session, payload)
+        response = await self.request("POST", "graphql", session, payload)
         logging.info(response)
 
         if response["data"].get("errors", None) != None:

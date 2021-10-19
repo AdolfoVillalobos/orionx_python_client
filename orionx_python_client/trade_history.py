@@ -14,7 +14,7 @@ async def get_order(self, order_id: str, session: aiohttp.ClientSession):
 
 
 async def get_orders_history(self, page_id: str, session: aiohttp.ClientSession):
-    query_str = get_orders_history_query(page_id=page)
+    query_str = get_orders_history_query(page_id=page_id)
     payload = {"query": query_str, "variables": {}}
     response = await self.request(
         "POST", "graphql", session, payload
