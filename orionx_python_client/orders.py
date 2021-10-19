@@ -13,7 +13,7 @@ async def close_order_by_id(self, order_id: str, session: aiohttp.ClientSession)
         logging.info(f"Closing Order {order_id}")
         query_str = get_cancel_order_query(order_id=order_id)
         payload = {"query": query_str, "variables": {}}
-        response = await self.client.request("POST", "graphql", session, payload)
+        response = await self.request("POST", "graphql", session, payload)
         logging.info(response)
 
         if response["data"].get("cancelOrder", None) == None:
@@ -46,7 +46,7 @@ async def get_open_orders(self, session: aiohttp.ClientSession):
     try:
         query_str = get_open_orders_query()
         payload = {"query": query_str, "variables": {}}
-        response = await self.client.request("POST", "graphql", session, payload)
+        response = await self.request("POST", "graphql", session, payload)
         logging.info(response)
 
         if "data" in response:
