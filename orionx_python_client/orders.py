@@ -1,7 +1,9 @@
 import aiohttp
 import asyncio
+import json
 import logging
-from .queries import get_cancel_order_query, get_open_orders_query, get_new_position_query
+from typing import List
+from .queries import get_cancel_order_query, get_open_orders_query, get_new_position_query, get_cancel_multiple_orders_query
 
 
 async def close_order_by_id(self, order_id: str, session: aiohttp.ClientSession):
@@ -86,16 +88,28 @@ async def get_order_status(self, order_id: str, session: aiohttp.ClientSession):
         raise Exception("Could not get Order Status")
 
 
-async def close_orders_by_market(self, market: str, session: aiohttp.ClientSession):
+async def close_orders(self, order_ids: List[str], session: aiohttp.ClientSession):
     try:
-        logging.info(f"CLOSING ORDERS BY {market}")
-        market_orders = await self.get_open_orders_by_market(
-            market=market, session=session
-        )
-        await self.close_orders(list(market_orders.keys()), session=session)
+        logging.info(f"CLOSING ORDERS: {order_ids}")
+        str_ids = json.dumps(order_ids)
+        query_str = get_cancel_multiple_orders_query(str_ids=str_ids)
+        payload = {"query": query_str, "variables": {}}
+        response = await self.client.request("POST", "graphql", session, payload)
+
+        for order in order_ids:
+            status = await self.get_order_status(order_id=order, session=session)
+            while status == "open":
+                await self.close_order_by_id(order_id=order, session=session)
+                status = await self.get_order_status(
+                    order_id=order, session=session
+                )
+
+            logging.info(f"ORDER {order} has correctly been closed: {status}")
+        return response
     except Exception as err:
         logging.debug(err)
-        raise err
+        raise Exception(
+            "OrionXExchange Error: Could not close orders  {order_ids}")
 
 
 async def new_position(
