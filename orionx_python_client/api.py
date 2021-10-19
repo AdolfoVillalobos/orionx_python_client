@@ -27,9 +27,9 @@ class AbstractAPI(ABC):
     ):
         try:
             timestamp = time.time()
-            data = self.get_payload(payload, timestamp)
+            data = self.get_payload(payload)
             signature = self.get_signature(
-                payload=payload, endpoint=path, timestamp=timestamp
+                payload=payload, timestamp=timestamp
             )
             headers = self.get_headers(signature, timestamp)
             url = self.api_url + path
@@ -63,7 +63,7 @@ class AbstractAPI(ABC):
         pass
 
     @abstractmethod
-    def get_signature(self, payload, endpoint):
+    def get_signature(self, payload, timestamp):
         pass
 
     @abstractmethod
@@ -90,6 +90,7 @@ class OrionXAPI(AbstractAPI):
 
     def get_signature(self, payload, timestamp):
         body = json.dumps(payload)
+        print(self.secret_key)
         key = bytearray(self.secret_key, "utf-8")
         msg = str(int(timestamp)) + str(body)
         msg = msg.encode("utf-8")
