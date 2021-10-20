@@ -164,3 +164,12 @@ def get_new_position_query(
         }}
     """
     return query_str
+
+
+def get_real_time_token_query():
+    query_str = """
+        mutation {
+        requestRealtimeToken
+        }
+        """
+    return query_str

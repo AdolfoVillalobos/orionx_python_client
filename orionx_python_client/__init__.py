@@ -7,7 +7,11 @@ class OrionXClient(OrionXAPI):
 
         super().__init__(api_key=api_key, api_url=api_url, secret_key=secret_key)
 
-        # Trade History
+    # Get Toek
+
+    from orionx_python_client.token import get_real_time_token
+
+    # Trade History
     from orionx_python_client.trade_history import get_order
     from orionx_python_client.trade_history import get_balance
     from orionx_python_client.trade_history import get_orders_history
