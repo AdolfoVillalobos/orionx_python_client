@@ -19,6 +19,7 @@ class OrionXClient(OrionXAPI):
     # Close Orders
     from orionx_python_client.orders import close_order_by_id
     from orionx_python_client.orders import close_orders_by_market
+    from orionx_python_client.orders import close_orders
 
     # New Position
     from orionx_python_client.orders import new_position
