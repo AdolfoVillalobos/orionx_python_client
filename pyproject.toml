@@ -1,11 +1,11 @@
 [tool.poetry]
 name = "orionx-python-client"
-version = "0.2.0"
+version = "0.2.1"
 description = ""
 authors = ["adolfrodeno <amvillalobos@uc.cl>"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.8"
 aiohttp = "^3.3.1"
 python-dotenv = "^0.19.1"
 
