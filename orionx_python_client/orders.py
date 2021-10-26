@@ -63,12 +63,12 @@ async def get_open_orders(self, session: aiohttp.ClientSession):
 
 
 async def get_open_orders_by_market(
-    self, market: str, session: aiohttp.ClientSession
+    self, selling: bool, market: str, session: aiohttp.ClientSession
 ):
     try:
         query_str = get_open_orders_query()
         payload = {"query": query_str, "variables": {}}
-        response = await self.client.request("POST", "graphql", session, payload)
+        response = await self.request("POST", "graphql", session, payload)
         logging.info(response)
 
         if "data" in response:
@@ -76,7 +76,7 @@ async def get_open_orders_by_market(
                 order["_id"]: order["market"]["code"]
                 for order in response["data"]["orders"]["items"]
                 if order["market"]["code"] == market.replace("/", "")
-                and order["sell"] == True
+                and order["sell"] == selling
             }
             logging.info(f"OPEN ORDERS in {market}: {ids}")
             return ids
