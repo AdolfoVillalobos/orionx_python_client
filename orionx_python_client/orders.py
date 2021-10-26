@@ -62,6 +62,30 @@ async def get_open_orders(self, session: aiohttp.ClientSession):
         raise Exception("Could not get open ids")
 
 
+async def get_open_orders_by_market(
+    self, market: str, session: aiohttp.ClientSession
+):
+    try:
+        query_str = get_open_orders_query()
+        payload = {"query": query_str, "variables": {}}
+        response = await self.client.request("POST", "graphql", session, payload)
+        logging.info(response)
+
+        if "data" in response:
+            ids = {
+                order["_id"]: order["market"]["code"]
+                for order in response["data"]["orders"]["items"]
+                if order["market"]["code"] == market.replace("/", "")
+                and order["sell"] == True
+            }
+            logging.info(f"OPEN ORDERS in {market}: {ids}")
+            return ids
+        return []
+    except Exception as err:
+        logging.debug(err)
+        raise Exception(f"Could not get open ids for market {market}")
+
+
 async def close_orders_by_market(self, market: str, session: aiohttp.ClientSession):
     try:
         logging.info(f"CLOSING ORDERS BY {market}")
