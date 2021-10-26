@@ -18,6 +18,7 @@ class OrionXClient(OrionXAPI):
 
     # Order Status
     from orionx_python_client.orders import get_open_orders
+    from orionx_python_client.orders import get_open_orders_by_market
     from orionx_python_client.orders import get_order_status
 
     # Close Orders
