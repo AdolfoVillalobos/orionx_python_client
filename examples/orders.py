@@ -15,7 +15,11 @@ async def main():
 
     async with aiohttp.ClientSession() as session:
 
-        resp = await ox.get_open_orders_by_market(market="BTC/CLP", selling=False, session=session)
+        resp = await ox.get_open_orders_by_market(market="BTC/CLP", selling="false", session=session)
+
+        print(resp)
+
+        resp = await ox.close_orders_by_market(market="BTC/CLP", selling="false", session=session)
 
         print(resp)
 

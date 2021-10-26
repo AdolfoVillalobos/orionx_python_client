@@ -63,7 +63,7 @@ async def get_open_orders(self, session: aiohttp.ClientSession):
 
 
 async def get_open_orders_by_market(
-    self, selling: bool, market: str, session: aiohttp.ClientSession
+    self, selling: str, market: str, session: aiohttp.ClientSession
 ):
     try:
         query_str = get_open_orders_query()
@@ -86,11 +86,11 @@ async def get_open_orders_by_market(
         raise Exception(f"Could not get open ids for market {market}")
 
 
-async def close_orders_by_market(self, market: str, session: aiohttp.ClientSession):
+async def close_orders_by_market(self, market: str, selling: str, session: aiohttp.ClientSession):
     try:
         logging.info(f"CLOSING ORDERS BY {market}")
         market_orders = await self.get_open_orders_by_market(
-            market=market, session=session
+            market=market, selling=selling, session=session
         )
         await self.close_orders(list(market_orders.keys()), session=session)
     except Exception as err:
