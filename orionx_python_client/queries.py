@@ -143,7 +143,7 @@ def get_balance_query():
     return query_str
 
 
-def get_order_status(order_id: str):
+def get_order_status_query(order_id: str):
     query = f"""
         query {{
             order(orderId: "{order_id}"){{

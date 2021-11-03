@@ -5,7 +5,7 @@ import logging
 
 from typing import List
 from .currency import CEROS
-from .queries import get_cancel_order_query, get_open_orders_query, get_new_position_query, get_cancel_multiple_orders_query
+from .queries import get_cancel_order_query, get_open_orders_query, get_new_position_query, get_cancel_multiple_orders_query, get_order_status_query
 
 
 async def close_order_by_id(self, order_id: str, session: aiohttp.ClientSession):
@@ -100,10 +100,15 @@ async def close_orders_by_market(self, market: str, selling: str, session: aioht
 
 async def get_order_status(self, order_id: str, session: aiohttp.ClientSession):
     try:
-        query_str = get_order_status(order_id=order_id)
+        query_str = get_order_status_query(order_id=order_id)
         payload = {"query": query_str, "variables": {}}
         response = await self.request("POST", "graphql", session, payload)
         logging.debug(response)
+        print(response)
+
+        if "errors" in response:
+            logging.debug(response)
+            raise Exception("Errors in Get Status Status")
 
         if "data" in response:
             status = response["data"]["order"]["status"]
@@ -111,27 +116,25 @@ async def get_order_status(self, order_id: str, session: aiohttp.ClientSession):
         return None
     except Exception as err:
         logging.debug(err)
-        raise Exception("Could not get Order Status")
+        logging.debug("Could not get Order Status")
+        return None
 
 
 async def close_orders(self, order_ids: List[str], session: aiohttp.ClientSession):
     try:
         logging.info(f"CLOSING ORDERS: {order_ids}")
-        str_ids = json.dumps(order_ids)
-        query_str = get_cancel_multiple_orders_query(str_ids=str_ids)
-        payload = {"query": query_str, "variables": {}}
-        response = await self.request("POST", "graphql", session, payload)
+        if order_ids:
+            str_ids = json.dumps(order_ids)
+            query_str = get_cancel_multiple_orders_query(str_ids=str_ids)
+            payload = {"query": query_str, "variables": {}}
+            response = await self.request("POST", "graphql", session, payload)
+            logging.debug(response)
+            if 'errors' in response:
+                return None
 
-        for order in order_ids:
-            status = await self.get_order_status(order_id=order, session=session)
-            while status == "open":
-                await self.close_order_by_id(order_id=order, session=session)
-                status = await self.get_order_status(
-                    order_id=order, session=session
-                )
-
-            logging.info(f"ORDER {order} has correctly been closed: {status}")
-        return response
+            return response
+        else:
+            return None
     except Exception as err:
         logging.debug(err)
         raise Exception(
@@ -151,6 +154,8 @@ async def new_position(
         first_currency_code, second_currency_code = market_code.split("/")
         limit_price = limit_price * 10 ** CEROS[second_currency_code]
         amount = amount * 10 ** CEROS[first_currency_code]
+        logging.info(f"\t\tLimit Price: {limit_price}")
+        logging.info(f"\t\tAmount: {amount}")
 
         query_place_order = get_new_position_query(
             market_code=market_code.replace("/", ""),

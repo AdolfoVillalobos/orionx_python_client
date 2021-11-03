@@ -15,7 +15,7 @@ async def main():
 
     async with aiohttp.ClientSession() as session:
 
-        resp = await ox.get_real_time_token(session=session)
+        resp = await ox.get_order_status(order_id="123", session=session)
 
         print(resp)
 
