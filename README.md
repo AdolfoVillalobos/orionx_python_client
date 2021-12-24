@@ -37,10 +37,14 @@ logging.basicConfig(
 
 
 def main():
+
+    # Load API secrets from environment
+
     api_key = os.getenv("ORIONX_API_KEY")
     secret_key = os.getenv("ORIONX_API_SECRET")
     api_url = os.getenv("ORIONX_API_URL")
 
+    # Initialize OrionXClient
     ox = OrionXClient(api_key=api_key, secret_key=secret_key, api_url=api_url)
 
     try:
@@ -62,7 +66,11 @@ def main():
         logging.error(err)
 
 if __name__ == "__main__":
+
+    # Load environment variables from file
     load_dotenv(".env")
+
+    # Run Example
     main()
 
 ```
