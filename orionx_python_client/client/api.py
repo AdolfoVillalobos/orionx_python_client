@@ -2,7 +2,7 @@ import logging
 import hashlib
 import hmac
 import time
-import ujson
+import json
 import requests
 
 from typing import Dict
@@ -29,7 +29,7 @@ class BaseAPI(BaseModel):
 
             response = requests.post(url=url, headers=headers, data=data, timeout=10)
             response.raise_for_status()
-            return ujson.loads(response.text)
+            return json.loads(response.text)
 
         except Exception as err:
             logging.error(err)
@@ -85,7 +85,7 @@ class OrionXAPI(BaseAPI):
 
     def get_signature(self, payload: Dict, timestamp: int) -> str:
         try:
-            body = ujson.dumps(payload)
+            body = json.dumps(payload)
             key = bytearray(self.secret_key, "utf-8")
             msg = str(int(timestamp)) + str(body)
             msg = msg.encode("utf-8")
@@ -96,7 +96,7 @@ class OrionXAPI(BaseAPI):
             raise err
 
     def get_payload(self, payload) -> str:
-        return ujson.dumps(payload)
+        return json.dumps(payload)
 
     def parse_response(self, response):
         return response

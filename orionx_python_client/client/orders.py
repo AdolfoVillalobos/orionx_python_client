@@ -1,5 +1,5 @@
 import asyncio
-import ujson
+import json
 import logging
 
 
@@ -124,7 +124,7 @@ def close_orders(self, order_ids: List[str]):
     try:
         logging.info(f"CLOSING ORDERS: {order_ids}")
         if order_ids:
-            str_ids = ujson.dumps(order_ids)
+            str_ids = json.dumps(order_ids)
             query_str = get_cancel_multiple_orders_query(str_ids=str_ids)
             payload = {"query": query_str, "variables": {}}
             response = self.post(path="graphql", payload=payload)

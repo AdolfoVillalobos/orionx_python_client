@@ -20,11 +20,11 @@ async def main():
 
     async with aiohttp.ClientSession() as session:
 
-            o1 = await ox.new_position(market_code="BTC/USDT", amount=0.0006,
+            o1 = await ox.new_position(market_code="BTC/USDT", amount=0.0002,
                                 limit_price=60000, selling="true", session=session)
             logging.info(o1)
             
-            o2 = await ox.new_position(market_code="BTC/CLP", amount=0.0006, limit_price=60000000, selling="true", session=session)
+            o2 = await ox.new_position(market_code="BTC/CLP", amount=0.0002, limit_price=60000000, selling="true", session=session)
             logging.info(o2)
 
             resp = await ox.close_orders(order_ids=[o1, o2], session=session)

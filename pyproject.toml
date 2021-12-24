@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "orionx-python-client"
-version = "0.3.12"
+version = "0.3.13"
 description = ""
 authors = ["adolfrodeno <amvillalobos@uc.cl>"]
 
@@ -8,7 +8,6 @@ authors = ["adolfrodeno <amvillalobos@uc.cl>"]
 python = "^3.8"
 python-dotenv = "^0.19.1"
 pydantic = "^1.8.2"
-ujson = "^5.1.0"
 requests = ">=2.25.0"
 aiohttp = "^3.8.1"
 aiodns = "^3.0.0"

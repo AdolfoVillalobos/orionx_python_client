@@ -2,7 +2,7 @@ import logging
 import hashlib
 import hmac
 import time
-import ujson
+import json
 import requests
 import aiohttp
 
@@ -29,8 +29,9 @@ class AsyncBaseAPI(BaseModel):
             url = self.api_url + path
 
             async with session.post(url=url, headers=headers, data=data, timeout=30) as resp:
-                response = await resp.json()
-            return response
+                response = await resp.read()
+
+            return json.loads(response)
 
         except Exception as err:
             logging.error(err)
@@ -48,8 +49,8 @@ class AsyncBaseAPI(BaseModel):
 
 
             async with session.get(url=url, headers=headers, data=data, timemout=30) as resp:
-                response = await resp.json()
-            return response
+                response = await resp.read()
+            return json.loads()
 
         except Exception as err:
             logging.error(err)
@@ -86,7 +87,7 @@ class AsyncOrionXAPI(AsyncBaseAPI):
 
     def get_signature(self, payload: Dict, timestamp: int) -> str:
         try:
-            body = ujson.dumps(payload)
+            body = json.dumps(payload)
             key = bytearray(self.secret_key, "utf-8")
             msg = str(int(timestamp)) + str(body)
             msg = msg.encode("utf-8")
@@ -97,7 +98,7 @@ class AsyncOrionXAPI(AsyncBaseAPI):
             raise err
 
     def get_payload(self, payload) -> str:
-        return ujson.dumps(payload)
+        return json.dumps(payload)
 
     def parse_response(self, response):
         return response
