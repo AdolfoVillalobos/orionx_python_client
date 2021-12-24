@@ -29,7 +29,9 @@ class AsyncBaseAPI(BaseModel):
             url = self.api_url + path
 
             async with session.post(url=url, headers=headers, data=data, timeout=30) as resp:
-                response = await resp.read()
+                logging.info(resp.status)
+                response = await resp.text()
+                logging.info(response)
 
             return json.loads(response)
 
@@ -49,8 +51,10 @@ class AsyncBaseAPI(BaseModel):
 
 
             async with session.get(url=url, headers=headers, data=data, timemout=30) as resp:
-                response = await resp.read()
-            return json.loads()
+                logging.info(resp.status)
+                response = await resp.text()
+                logging.info(response)
+            return json.loads(response)
 
         except Exception as err:
             logging.error(err)

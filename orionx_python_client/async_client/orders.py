@@ -155,9 +155,9 @@ async def new_position(
 
         logging.info(
             f"\t\tPlacing New Order {first_currency_code}{second_currency_code}. Selling: {selling}")
-        limit_price = limit_price * 10 ** CEROS[second_currency_code]
-        amount = amount * 10 ** CEROS[first_currency_code]
-        # logging.info(f"\t\tLimit Price: {limit_price}")
+        limit_price = int(limit_price * 10 ** CEROS[second_currency_code])
+        amount = int(amount * 10 ** CEROS[first_currency_code])
+        logging.info(f"\t\tLimit Price: {limit_price}")
         logging.info(f"\t\tAmount: {amount}")
 
         query_place_order = get_new_position_query(
