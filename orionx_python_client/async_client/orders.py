@@ -169,7 +169,7 @@ async def new_position(
 
 
         limit_price =  limit_price * math.pow(10, second_currency_units)
-        amount = amount * math.pow(10, second_currency_units)
+        amount = amount * math.pow(10, first_currency_units)
         logging.info(f"\t\tLimit Price: {limit_price} {type(limit_price)}")
         logging.info(f"\t\tAmount: {amount} {type(amount)}")
 

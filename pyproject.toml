@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "orionx-python-client"
-version = "0.3.19"
+version = "0.4.0"
 description = ""
 authors = ["adolfrodeno <amvillalobos@uc.cl>"]
 
