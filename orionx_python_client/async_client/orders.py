@@ -157,13 +157,12 @@ async def new_position(
         logging.info(
             f"\tPlacing Limit Order for {first_currency_code}{second_currency_code}")
 
-        logging.info(f"\t\tLimit Price: {limit_price}. Amount: {amount}")
+        logging.info(f"\t\tLimit Price: {limit_price} {type(limit_price)}. Amount: {amount} {type(amount)}")
 
-
+        limit_price = float(limit_price)
+        amount = float(amount)
         first_currency_units = CEROS[first_currency_code]
         second_currency_units = CEROS[second_currency_code]
-        limit_price = float(round(limit_price, 2))
-        amount = float(round(amount, first_currency_code))
 
         logging.info(f"{first_currency_code } Digits: {first_currency_units}")
         logging.info(f"{second_currency_code } Digits: {second_currency_units}")
@@ -171,8 +170,8 @@ async def new_position(
 
         limit_price =  limit_price * math.pow(10, second_currency_units)
         amount = amount * math.pow(10, second_currency_units)
-        logging.info(f"\t\tLimit Price: {limit_price}")
-        logging.info(f"\t\tAmount: {amount}")
+        logging.info(f"\t\tLimit Price: {limit_price} {type(limit_price)}")
+        logging.info(f"\t\tAmount: {amount} {type(amount)}")
 
         query_place_order = get_new_position_query(
             market_code=market_code.replace("/", ""),
