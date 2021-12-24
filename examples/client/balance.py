@@ -1,6 +1,5 @@
 import os
 import asyncio
-import aiohttp
 from dotenv import load_dotenv
 
 from orionx_python_client import OrionXClient
@@ -13,15 +12,11 @@ async def main():
 
     ox = OrionXClient(api_key=api_key, secret_key=secret_key, api_url=api_url)
 
-    async with aiohttp.ClientSession() as session:
 
-        resp = await ox.get_order_status(order_id="123", session=session)
 
-        print(resp)
+    resp = ox.get_balance()
 
-        resp = await ox.close_order_by_id(order_id="1231", session=session)
-
-        print(resp)
+    print(resp)
 
 
 load_dotenv(".env")

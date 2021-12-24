@@ -3,7 +3,7 @@ import asyncio
 import aiohttp
 from dotenv import load_dotenv
 
-from orionx_python_client import OrionXClient
+from orionx_python_client import AsyncOrionXClient
 
 
 async def main():
@@ -11,13 +11,14 @@ async def main():
     secret_key = os.getenv("ORIONX_API_SECRET")
     api_url = os.getenv("ORIONX_API_URL")
 
-    ox = OrionXClient(api_key=api_key, secret_key=secret_key, api_url=api_url)
+    ox = AsyncOrionXClient(api_key=api_key, secret_key=secret_key, api_url=api_url)
 
     async with aiohttp.ClientSession() as session:
-
-        resp = await ox.get_balance(session=session)
+        resp = await ox.get_real_time_token(session=session)
 
         print(resp)
+
+
 
 
 load_dotenv(".env")
