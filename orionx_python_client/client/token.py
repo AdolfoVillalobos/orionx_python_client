@@ -1,7 +1,5 @@
 import logging
 
-from typing import List
-from ..currency import CEROS
 from ..queries import get_real_time_token_query
 
 

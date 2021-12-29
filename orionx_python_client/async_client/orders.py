@@ -5,7 +5,7 @@ import aiohttp
 import math
 
 
-from typing import List
+from typing import List, Dict
 from orionx_python_client.currency import CEROS
 from orionx_python_client.queries import get_cancel_order_query, get_open_orders_query, get_new_position_query, get_cancel_multiple_orders_query, get_order_status_query
 
@@ -148,7 +148,8 @@ async def new_position(
     amount: float,
     limit_price: float,
     selling: str,
-    session: aiohttp.ClientSession
+    session: aiohttp.ClientSession,
+    ceros_map: Dict=CEROS
 
 ):
     try:
@@ -161,8 +162,8 @@ async def new_position(
 
         limit_price = float(limit_price)
         amount = float(amount)
-        first_currency_units = CEROS[first_currency_code]
-        second_currency_units = CEROS[second_currency_code]
+        first_currency_units = ceros_map[first_currency_code]
+        second_currency_units = ceros_map[second_currency_code]
 
         logging.info(f"{first_currency_code } Digits: {first_currency_units}")
         logging.info(f"{second_currency_code } Digits: {second_currency_units}")

@@ -3,7 +3,7 @@ import json
 import logging
 
 
-from typing import List
+from typing import List, Dict
 from ..currency import CEROS
 from ..queries import get_cancel_order_query, get_open_orders_query, get_new_position_query, get_cancel_multiple_orders_query, get_order_status_query
 
@@ -147,6 +147,7 @@ def new_position(
     amount: float,
     limit_price: float,
     selling: str,
+    ceros_map: Dict=CEROS
 
 ):
     try:
@@ -154,8 +155,8 @@ def new_position(
 
         logging.info(
             f"\n\tPlacing New Order {first_currency_code}{second_currency_code}. Selling: {selling}")
-        limit_price = limit_price * 10 ** CEROS[second_currency_code]
-        amount = amount * 10 ** CEROS[first_currency_code]
+        limit_price = limit_price * 10 ** ceros_map[second_currency_code]
+        amount = amount * 10 ** ceros_map[first_currency_code]
         logging.info(f"\t\tLimit Price: {limit_price}")
         logging.info(f"\t\tAmount: {amount}")
 

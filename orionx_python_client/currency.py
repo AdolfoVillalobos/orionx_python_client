@@ -18,4 +18,5 @@ CEROS = {
     "ADA": 6,
     "SOL": 8,
     "MATIC": 8,
+    "AVAX": 8
 }
